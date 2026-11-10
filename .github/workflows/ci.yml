@@ -1,0 +1,24 @@
+name: Monitoring CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  check-scripts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Check Bash syntax
+        run: |
+          bash -n check_api.sh
+          bash -n analyze_logs.sh
+
+      - name: Test API monitoring
+        run: ./check_api.sh https://httpbin.org/status/200
